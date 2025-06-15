@@ -12,14 +12,15 @@
             min-height: 100vh;
             background-color: #f0f0f0;
             font-family: 'Noto Sans KR', sans-serif;
-            font-size: 5vw;
-            color: #555;
+            margin: 0;
+            padding: 0;
             flex-direction: column; /* 세로로 정렬 */
         }
+
         .chat-container {
             width: 100%;
-            max-width: 768px;
-            height: 60vh;
+            max-width: 768px; /* 아이패드 비율에 맞게 최대 폭 설정 */
+            height: 80vh; /* 대화창 높이 설정 */
             margin-top: 20px;
             background-color: white;
             border-radius: 10px;
@@ -27,9 +28,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
         }
+
         .chat-box {
             margin-bottom: 10px;
         }
+
         .message {
             padding: 10px;
             border-radius: 10px;
@@ -37,17 +40,23 @@
             margin: 5px 0;
             word-wrap: break-word;
         }
+
         .user {
             background-color: #d1e7ff; /* 파란 대화창 */
             text-align: right;
+            color: white; /* 내 대화창 글자 색 */
         }
+
         .assistant {
             background-color: #ffdbdb; /* 회색 대화창 */
+            color: black; /* 상대방 대화창 글자 색 */
         }
+
         .input-area {
             display: flex;
             margin-top: 20px;
         }
+
         input[type="text"] {
             width: 80%;
             padding: 10px;
@@ -55,6 +64,7 @@
             border-radius: 5px;
             border: 1px solid #ccc;
         }
+
         button {
             padding: 10px;
             border-radius: 5px;
@@ -63,6 +73,7 @@
             border: none;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
@@ -77,6 +88,7 @@
         <div class="message user">전남친: 나 그냥 폰하지!</div>
     </div>
 
+    <!-- 노래와 가수 입력창 -->
     <div class="input-area">
         <input type="text" id="song-input" placeholder="노래 입력..." onkeydown="checkEnter(event, 'song')"/>
         <button onclick="updateSong()">입력</button>

@@ -6,142 +6,159 @@
     <title>메인 화면</title>
     <style>
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 5vw;
+            color: #555;
+            flex-direction: column; /* 세로로 정렬 */
         }
-
         .chat-container {
-            width: 90%;
-            max-width: 600px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 768px;
+            height: 60vh;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 10px;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header .username {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .header .timestamp {
-            font-size: 14px;
-            color: #999;
-        }
-
-        .messages {
-            flex-grow: 1;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
-            margin-bottom: 20px;
         }
-
-        .message {
-            display: flex;
-            justify-content: flex-start;
+        .chat-box {
             margin-bottom: 10px;
         }
-
-        .message span {
-            background-color: #ececec;
+        .message {
+            padding: 10px;
             border-radius: 10px;
-            padding: 10px;
             max-width: 80%;
+            margin: 5px 0;
+            word-wrap: break-word;
         }
-
-        .message.user span {
-            background-color: #0084ff;
-            color: white;
+        .user {
+            background-color: #d1e7ff; /* 파란 대화창 */
+            text-align: right;
         }
-
-        .input-container {
+        .assistant {
+            background-color: #ffdbdb; /* 회색 대화창 */
+        }
+        .input-area {
             display: flex;
-            align-items: center;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
+            margin-top: 20px;
         }
-
-        .input-container input {
-            flex-grow: 1;
-            border: none;
+        input[type="text"] {
+            width: 80%;
             padding: 10px;
-            font-size: 14px;
-            border-radius: 20px;
-            background-color: #f0f0f0;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
-
-        .input-container input::placeholder {
-            color: #999;
-        }
-
-        .send-button {
-            margin-left: 10px;
-            background-color: #0084ff;
+        button {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 20px;
-            padding: 10px 15px;
             cursor: pointer;
         }
-
-        .send-button:hover {
-            background-color: #0077cc;
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="header">
-            <span class="username">Eau de Pico</span>
-            <span class="timestamp">7월 18일 (금) 03:18</span>
-        </div>
 
-        <div class="messages">
-            <div class="message">
-                <span>그렇게 진짜 오랜만이네</span>
-            </div>
-            <div class="message user">
-                <span>나 그냥 폰하지!</span>
-            </div>
-            <div class="message">
-                <span>아 혹시 저번에 너네 집에서 <노래> 들었을 때 났던 향 기억나?</span>
-            </div>
-        </div>
+    <div class="chat-container" id="chat-box"></div>
 
-        <div class="input-container">
-            <input type="text" placeholder="메시지를 입력하세요..." id="message-input">
-            <button class="send-button" onclick="sendMessage()">보내기</button>
-        </div>
+    <div class="input-area">
+        <input type="text" id="song-input" placeholder="노래 입력..." onkeydown="checkEnter(event, 'song')"/>
+        <button onclick="updateSong()">입력</button>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="singer-input" placeholder="가수 입력..." onkeydown="checkEnter(event, 'singer')"/>
+        <button onclick="updateSinger()">입력</button>
     </div>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('message-input');
-            const message = input.value.trim();
-            if (message) {
-                const messageContainer = document.querySelector('.messages');
-                const newMessage = document.createElement('div');
-                newMessage.classList.add('message');
-                newMessage.innerHTML = `<span>${message}</span>`;
-                messageContainer.appendChild(newMessage);
-                input.value = '';
-                messageContainer.scrollTop = messageContainer.scrollHeight;  // 자동으로 스크롤
+        let chatBox = document.getElementById("chat-box");
+        let songInput = document.getElementById("song-input");
+        let singerInput = document.getElementById("singer-input");
+
+        function addMessage(content, className) {
+            let messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", className);
+            messageDiv.innerHTML = content;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        }
+
+        function updateSong() {
+            let song = songInput.value;
+            if (song) {
+                addMessage(`${song}`, "user");
+                songInput.value = "";
+                songInput.disabled = true; // Disable input after entering
+                setTimeout(showNextChat, 1000); // Wait for 1 second to show next chat
             }
         }
+
+        function updateSinger() {
+            let singer = singerInput.value;
+            if (singer) {
+                addMessage(`${singer}`, "user");
+                singerInput.value = "";
+                singerInput.disabled = true; // Disable input after entering
+                setTimeout(showNextChat, 1000); // Wait for 1 second to show next chat
+            }
+        }
+
+        function checkEnter(event, type) {
+            if (event.key === "Enter") {
+                if (type === "song") {
+                    updateSong();
+                } else if (type === "singer") {
+                    updateSinger();
+                }
+            }
+        }
+
+        function showNextChat() {
+            addMessage("아 혹시 저번에 너네 집에서 <span id='song-name'>노래</span> 들었을 때 났던 향 기억나?", "assistant");
+            setTimeout(() => {
+                addMessage("그거 무슨 향인지 궁금해서..ㅠ", "assistant");
+                setTimeout(() => {
+                    addMessage("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", "assistant");
+                    setTimeout(() => {
+                        addMessage("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", "user");
+                        setTimeout(() => {
+                            addMessage("아", "user");
+                            setTimeout(() => {
+                                addMessage("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", "user");
+                                setTimeout(() => {
+                                    addMessage("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", "user");
+                                    setTimeout(() => {
+                                        addMessage("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", "user");
+                                        setTimeout(() => {
+                                            addMessage("어이없는데 웃겨서 말해줄게", "user");
+                                            setTimeout(() => {
+                                                addMessage("[1] {}%, [2] {}%, [3] {}%", "user");
+                                                setTimeout(() => {
+                                                    addMessage("야 너 진짜 이게 목적이네..", "user");
+                                                }, 1000);
+                                            }, 1000);
+                                        }, 1000);
+                                    }, 1000);
+                                }, 1000);
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }
     </script>
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 화면</title>
+    <title>대화창 예시</title>
     <style>
         body {
             display: flex;
@@ -70,7 +70,12 @@
 </head>
 <body>
 
-    <div class="chat-container" id="chat-box"></div>
+    <div class="chat-container" id="chat-box">
+        <!-- 초기 대화 내용 -->
+        <div class="message assistant">나: 뭐해?? 진짜 오랜만이다</div>
+        <div class="message user">전남친: 그러게 진짜 오랜만이네</div>
+        <div class="message user">전남친: 나 그냥 폰하지!</div>
+    </div>
 
     <div class="input-area">
         <input type="text" id="song-input" placeholder="노래 입력..." onkeydown="checkEnter(event, 'song')"/>

@@ -10,17 +10,18 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* 기본 배경색 유지 */
             font-family: 'Noto Sans KR', sans-serif;
             margin: 0;
             padding: 0;
             flex-direction: column; /* 세로로 정렬 */
         }
 
+        /* 대화창 높이 고정 (사진에 맞게 조정) */
         .chat-container {
             width: 100%;
-            max-width: 768px; /* 아이패드 비율에 맞게 최대 폭 설정 */
-            height: 80vh; /* 대화창 높이 설정 */
+            max-width: 768px; /* 아이패드 화면 비율에 맞추기 */
+            height: 300px; /* 대화창의 높이를 사진과 동일하게 설정 */
             margin-top: 20px;
             background-color: white;
             border-radius: 10px;
@@ -41,15 +42,18 @@
             word-wrap: break-word;
         }
 
-        .user {
-            background-color: #d1e7ff; /* 파란 대화창 */
-            text-align: right;
-            color: white; /* 내 대화창 글자 색 */
+        /* 상대방 대화창: 회색, 왼쪽 정렬 */
+        .assistant {
+            background-color: #d3d3d3; /* 회색 대화창 */
+            color: black;
+            text-align: left;
         }
 
-        .assistant {
-            background-color: #ffdbdb; /* 회색 대화창 */
-            color: black; /* 상대방 대화창 글자 색 */
+        /* 내 대화창: 파란색, 오른쪽 정렬 */
+        .user {
+            background-color: #007bff; /* 파란 대화창 */
+            color: white;
+            text-align: right;
         }
 
         .input-area {
@@ -81,8 +85,10 @@
 </head>
 <body>
 
+    <h1>메인 화면입니다!</h1> <!-- 기존 기본 텍스트 유지 -->
+
     <div class="chat-container" id="chat-box">
-        <!-- 초기 대화 내용 -->
+        <!-- 기본 대화 내용 -->
         <div class="message assistant">나: 뭐해?? 진짜 오랜만이다</div>
         <div class="message user">전남친: 그러게 진짜 오랜만이네</div>
         <div class="message user">전남친: 나 그냥 폰하지!</div>

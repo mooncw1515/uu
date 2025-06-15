@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 화면</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            color: #333;
+            margin: 0;
+        }
+
+        .message-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .left-message {
+            background-color: #e0e0e0;
+            color: #333;
+            margin-right: auto;
+        }
+
+        .right-message {
+            background-color: #0078d4;
+            color: white;
+            margin-left: auto;
+        }
+
+        .timestamp {
+            position: absolute;
+            font-size: 10px;
+            color: #888;
+            bottom: -18px;
+        }
+
+        .input-container {
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .input-container button {
+            margin-left: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .editable {
+            color: #0078d4;
+            font-weight: bold;
+        }
+
+        .input-container input:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Eau de Pico</h1>
+        <div class="time">07월 18일 (금) 03:18</div>
+    </div>
+
+    <div class="message-container">
+        <!-- 오른쪽 메시지 -->
+        <div class="message right-message">
+            <span>뭐해? 진짜 오랜만이다</span>
+            <div class="timestamp">07월 18일 (금) 13:18</div>
+        </div>
+        <!-- 왼쪽 메시지 -->
+        <div class="message left-message">
+            <span>그렇게 진짜 오랜만이네</span>
+            <div class="timestamp">07월 18일 (금) 03:18</div>
+        </div>
+        <!-- 왼쪽 메시지 -->
+        <div class="message left-message">
+            <span>나 그냥 폰하지!</span>
+            <div class="timestamp">07월 18일 (금) 13:18</div>
+        </div>
+    </div>
+
+    <div class="input-container">
+        <span>아 혹시 저번에 너네 집에서 </span>
+        <input type="text" placeholder="<노래>" id="song-input">
+        <span> 들었을 때 낳던 향 기억나?</span>
+        <button onclick="sendMessage()">전송</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            let message = document.getElementById('song-input').value;
+            if (message) {
+                let newMessage = document.createElement('div');
+                newMessage.classList.add('message', 'right-message');
+                newMessage.innerHTML = `<span>${message}</span><div class="timestamp">Now</div>`;
+                document.querySelector('.message-container').appendChild(newMessage);
+                document.getElementById('song-input').value = '';
+                document.querySelector('.message-container').scrollTop = document.querySelector('.message-container').scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

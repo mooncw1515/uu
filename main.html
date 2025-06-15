@@ -3,185 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>대화창 예시</title>
+    <title>메인 화면</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f0f0; /* 기본 배경색 유지 */
+            background-color: #f0f0f0;
             font-family: 'Noto Sans KR', sans-serif;
+            font-size: 5vw;
+            color: #555;
             margin: 0;
             padding: 0;
-            flex-direction: column; /* 세로로 정렬 */
         }
 
-        /* 대화창 높이 고정 (사진에 맞게 조정) */
         .chat-container {
-            width: 100%;
-            max-width: 768px; /* 아이패드 화면 비율에 맞추기 */
-            height: 300px; /* 대화창의 높이를 사진과 동일하게 설정 */
-            margin-top: 20px;
-            background-color: white;
-            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
-        }
-
-        .chat-box {
-            margin-bottom: 10px;
+            height: 80vh;
         }
 
         .message {
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 80%;
-            margin: 5px 0;
-            word-wrap: break-word;
-        }
-
-        /* 상대방 대화창: 회색, 왼쪽 정렬 */
-        .assistant {
-            background-color: #d3d3d3; /* 회색 대화창 */
-            color: black;
-            text-align: left;
-        }
-
-        /* 내 대화창: 파란색, 오른쪽 정렬 */
-        .user {
-            background-color: #007bff; /* 파란 대화창 */
-            color: white;
-            text-align: right;
-        }
-
-        .input-area {
             display: flex;
-            margin-top: 20px;
+            margin-bottom: 10px;
         }
 
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        .message.left {
+            justify-content: flex-start;
         }
 
-        button {
+        .message.right {
+            justify-content: flex-end;
+        }
+
+        .message .bubble {
+            max-width: 70%;
             padding: 10px;
-            border-radius: 5px;
-            background-color: #007bff;
+            border-radius: 15px;
             color: white;
-            border: none;
-            cursor: pointer;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .message.left .bubble {
+            background-color: #ccc; /* Gray for left (other person's message) */
+            color: black;
+        }
+
+        .message.right .bubble {
+            background-color: #007aff; /* Blue for right (my message) */
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
+    <div class="chat-container" id="chatContainer">
+        <!-- 기본 대사 유지 -->
+        <div class="message left">
+            <div class="bubble">그렇게 진짜 오랜만이네</div>
+        </div>
+        <div class="message left">
+            <div class="bubble">나 그냥 폰하지!</div>
+        </div>
 
-    <h1>메인 화면입니다!</h1> <!-- 기존 기본 텍스트 유지 -->
+        <!-- 대화 입력 부분 (기본화면의 입력창을 그대로 사용) -->
+        <div class="message right">
+            <div class="bubble">아 혹시 저번에 너네 집에서 <input id="songInput" placeholder="노래" type="text" oninput="updateSong()"></div>
+        </div>
 
-    <div class="chat-container" id="chat-box">
-        <!-- 기본 대화 내용 -->
-        <div class="message assistant">나: 뭐해?? 진짜 오랜만이다</div>
-        <div class="message user">전남친: 그러게 진짜 오랜만이네</div>
-        <div class="message user">전남친: 나 그냥 폰하지!</div>
+        <div class="message right" id="artistMessage">
+            <div class="bubble"><input id="artistInput" placeholder="가수" type="text" oninput="updateArtist()"></div>
+        </div>
     </div>
 
-    <!-- 노래와 가수 입력창 -->
-    <div class="input-area">
-        <input type="text" id="song-input" placeholder="노래 입력..." onkeydown="checkEnter(event, 'song')"/>
-        <button onclick="updateSong()">입력</button>
-    </div>
-
-    <div class="input-area">
-        <input type="text" id="singer-input" placeholder="가수 입력..." onkeydown="checkEnter(event, 'singer')"/>
-        <button onclick="updateSinger()">입력</button>
+    <div class="input-wrapper">
+        <input type="text" id="detailedMessageInput" placeholder="Message here..." onkeyup="handleEnter(event)">
     </div>
 
     <script>
-        let chatBox = document.getElementById("chat-box");
-        let songInput = document.getElementById("song-input");
-        let singerInput = document.getElementById("singer-input");
+        let songInput = document.getElementById('songInput');
+        let artistInput = document.getElementById('artistInput');
+        let chatContainer = document.getElementById('chatContainer');
+        let artistMessage = document.getElementById('artistMessage');
+        let messageQueue = [];
+        let messageInterval;
 
-        function addMessage(content, className) {
-            let messageDiv = document.createElement("div");
-            messageDiv.classList.add("message", className);
-            messageDiv.innerHTML = content;
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        // 대사를 1초 간격으로 출력하는 함수
+        function displayMessages() {
+            if (messageQueue.length === 0) {
+                clearInterval(messageInterval);
+                return;
+            }
+            const nextMessage = messageQueue.shift();
+            chatContainer.innerHTML += nextMessage;
         }
 
+        // 노래 입력 후 대화창에 반영
         function updateSong() {
-            let song = songInput.value;
-            if (song) {
-                addMessage(`${song}`, "user");
-                songInput.value = "";
-                songInput.disabled = true; // Disable input after entering
-                setTimeout(showNextChat, 1000); // Wait for 1 second to show next chat
-            }
-        }
-
-        function updateSinger() {
-            let singer = singerInput.value;
-            if (singer) {
-                addMessage(`${singer}`, "user");
-                singerInput.value = "";
-                singerInput.disabled = true; // Disable input after entering
-                setTimeout(showNextChat, 1000); // Wait for 1 second to show next chat
-            }
-        }
-
-        function checkEnter(event, type) {
-            if (event.key === "Enter") {
-                if (type === "song") {
-                    updateSong();
-                } else if (type === "singer") {
-                    updateSinger();
+            const songText = songInput.value;
+            if (songText) {
+                const songMessage = `<div class="message right"><div class="bubble">그거 무슨 향인지 궁금해서..ㅠ</div></div>`;
+                messageQueue.push(songMessage);
+                if (!messageInterval) {
+                    messageInterval = setInterval(displayMessages, 1000); // 1초 간격으로 출력 시작
                 }
             }
         }
 
-        function showNextChat() {
-            addMessage("아 혹시 저번에 너네 집에서 <span id='song-name'>노래</span> 들었을 때 났던 향 기억나?", "assistant");
-            setTimeout(() => {
-                addMessage("그거 무슨 향인지 궁금해서..ㅠ", "assistant");
-                setTimeout(() => {
-                    addMessage("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", "assistant");
-                    setTimeout(() => {
-                        addMessage("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", "user");
-                        setTimeout(() => {
-                            addMessage("아", "user");
-                            setTimeout(() => {
-                                addMessage("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", "user");
-                                setTimeout(() => {
-                                    addMessage("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", "user");
-                                    setTimeout(() => {
-                                        addMessage("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", "user");
-                                        setTimeout(() => {
-                                            addMessage("어이없는데 웃겨서 말해줄게", "user");
-                                            setTimeout(() => {
-                                                addMessage("[1] {}%, [2] {}%, [3] {}%", "user");
-                                                setTimeout(() => {
-                                                    addMessage("야 너 진짜 이게 목적이네..", "user");
-                                                }, 1000);
-                                            }, 1000);
-                                        }, 1000);
-                                    }, 1000);
-                                }, 1000);
-                            }, 1000);
-                        }, 1000);
-                    }, 1000);
-                }, 1000);
-            }, 1000);
+        // 가수 입력 후 대화창에 반영
+        function updateArtist() {
+            const artistText = artistInput.value;
+            if (artistText) {
+                const artistMessageContent = `<div class="message right"><div class="bubble">참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라</div></div>`;
+                messageQueue.push(artistMessageContent);
+            }
+        }
+
+        // 기본 대사 출력 후 나머지 대사 자동 출력
+        setTimeout(() => {
+            messageQueue.push('<div class="message left"><div class="bubble">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</div></div>');
+            messageQueue.push('<div class="message left"><div class="bubble">아</div></div>');
+            messageQueue.push('<div class="message left"><div class="bubble">탑은 [1]고, 미들은 [2]고, 베이스는 [3]</div></div>');
+            messageQueue.push('<div class="message right"><div class="bubble">ㄱㅅㄱㅅ</div></div>');
+            messageQueue.push('<div class="message right"><div class="bubble">어이없겠지만 혹시 향료 비율도 알려줄 수 있어?</div></div>');
+        }, 1000);
+        
+        // 대화 입력창에서 엔터를 누르면 대화 추가
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                const message = event.target.value;
+                if (message.trim() !== '') {
+                    const newMessage = `<div class="message right"><div class="bubble">${message}</div></div>`;
+                    chatContainer.innerHTML += newMessage;
+                    event.target.value = '';
+                }
+            }
         }
     </script>
-
 </body>
 </html>

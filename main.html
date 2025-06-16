@@ -3,165 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 화면</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f0f0f0;
-            font-family: 'Noto Sans KR', sans-serif;
-            font-size: 5vw;
-            color: #555;
-            margin: 0;
-            padding: 0;
-        }
-
-        .chat-container {
-            width: 90%;
-            max-width: 600px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            overflow-y: auto;
-            height: 80vh;
-        }
-
-        .message {
-            display: flex;
-            margin-bottom: 10px;
-        }
-
-        .message.left {
-            justify-content: flex-start;
-        }
-
-        .message.right {
-            justify-content: flex-end;
-        }
-
-        .message .bubble {
-            max-width: 70%;
-            padding: 10px;
-            border-radius: 15px;
-            color: white;
-        }
-
-        .message.left .bubble {
-            background-color: #ccc; /* Gray for left (other person's message) */
-            color: black;
-        }
-
-        .message.right .bubble {
-            background-color: #007aff; /* Blue for right (my message) */
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        .input-wrapper {
-            display: flex;
-            justify-content: center;
-            position: fixed;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            padding: 10px;
-            background-color: #f0f0f0;
-        }
-    </style>
+    <title>iMessage Clone</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="chat-container" id="chatContainer">
-        <!-- 기본 대사 유지 -->
-        <div class="message left">
-            <div class="bubble">그렇게 진짜 오랜만이네</div>
-        </div>
-        <div class="message left">
-            <div class="bubble">나 그냥 폰하지!</div>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="header-center">
+                <div class="profile-pic">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="username">Eau de Pico</div>
+            </div>
+            <div class="header-right">
+                <i class="fas fa-video"></i>
+            </div>
+        </header>
+
+        <div class="chat-area">
+            <div class="message-date-time">7월 18일 (금) 03:18</div>
+
+            <div class="message-row right">
+                <div class="message-bubble blue">
+                    뭐해?? 진짜 오랜만이다
+                </div>
+            </div>
+
+            <div class="message-date-time">7월 18일 (금) 13:18</div>
+
+            <div class="message-row left">
+                <div class="message-bubble gray">
+                    그러게 진짜 오랜만이네
+                </div>
+            </div>
+            <div class="message-row left">
+                <div class="message-bubble gray">
+                    나 그냥 폰하지!
+                </div>
+            </div>
         </div>
 
-        <!-- 대화 입력 부분 (기본화면의 입력창을 그대로 사용) -->
-        <div class="message right">
-            <div class="bubble">아 혹시 저번에 너네 집에서 <input id="songInput" placeholder="노래" type="text" oninput="updateSong()"></div>
-        </div>
-
-        <div class="message right" id="artistMessage">
-            <div class="bubble"><input id="artistInput" placeholder="가수" type="text" oninput="updateArtist()"></div>
+        <div class="bottom-bar">
+            <div class="plus-icon-container">
+                <i class="fas fa-plus-circle"></i> 
+            </div>
+            <div class="input-bar">
+                아 혹시 저번에 너네 집에서 <span contenteditable="true" class="editable-text">노래</span> 들었을 때 났던 향 기억나?
+            </div>
+            <div class="mic-icon-container"> <i class="fas fa-microphone"></i> 
+            </div>
+            <div class="send-button"> <i class="fas fa-paper-plane"></i> 
+            </div>
         </div>
     </div>
-
-    <div class="input-wrapper">
-        <input type="text" id="detailedMessageInput" placeholder="Message here..." onkeyup="handleEnter(event)">
-    </div>
-
-    <script>
-        let songInput = document.getElementById('songInput');
-        let artistInput = document.getElementById('artistInput');
-        let chatContainer = document.getElementById('chatContainer');
-        let artistMessage = document.getElementById('artistMessage');
-        let messageQueue = [];
-        let messageInterval;
-
-        // 대사를 1초 간격으로 출력하는 함수
-        function displayMessages() {
-            if (messageQueue.length === 0) {
-                clearInterval(messageInterval);
-                return;
-            }
-            const nextMessage = messageQueue.shift();
-            chatContainer.innerHTML += nextMessage;
-        }
-
-        // 노래 입력 후 대화창에 반영
-        function updateSong() {
-            const songText = songInput.value;
-            if (songText) {
-                const songMessage = `<div class="message right"><div class="bubble">그거 무슨 향인지 궁금해서..ㅠ</div></div>`;
-                messageQueue.push(songMessage);
-                if (!messageInterval) {
-                    messageInterval = setInterval(displayMessages, 1000); // 1초 간격으로 출력 시작
-                }
-            }
-        }
-
-        // 가수 입력 후 대화창에 반영
-        function updateArtist() {
-            const artistText = artistInput.value;
-            if (artistText) {
-                const artistMessageContent = `<div class="message right"><div class="bubble">참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라</div></div>`;
-                messageQueue.push(artistMessageContent);
-            }
-        }
-
-        // 기본 대사 출력 후 나머지 대사 자동 출력
-        setTimeout(() => {
-            messageQueue.push('<div class="message left"><div class="bubble">ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ</div></div>');
-            messageQueue.push('<div class="message left"><div class="bubble">아</div></div>');
-            messageQueue.push('<div class="message left"><div class="bubble">탑은 [1]고, 미들은 [2]고, 베이스는 [3]</div></div>');
-            messageQueue.push('<div class="message right"><div class="bubble">ㄱㅅㄱㅅ</div></div>');
-            messageQueue.push('<div class="message right"><div class="bubble">어이없겠지만 혹시 향료 비율도 알려줄 수 있어?</div></div>');
-        }, 1000);
-        
-        // 대화 입력창에서 엔터를 누르면 대화 추가
-        function handleEnter(event) {
-            if (event.key === 'Enter') {
-                const message = event.target.value;
-                if (message.trim() !== '') {
-                    const newMessage = `<div class="message right"><div class="bubble">${message}</div></div>`;
-                    chatContainer.innerHTML += newMessage;
-                    event.target.value = '';
-                }
-            }
-        }
-    </script>
 </body>
 </html>

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 엔터 키를 눌렀을 때 메시지 추가
     chatMessageInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            const messageText = chatMessageInput.textContent.trim(); // 입력된 메시지
+            const messageText = getFullMessage(); // 전체 메시지 가져오기
 
             if (messageText !== '') {
                 // 메시지 추가
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // '전송' 버튼 클릭 시 메시지 추가
     const sendButton = document.querySelector('.send-button');
     sendButton.addEventListener('click', function() {
-        const messageText = chatMessageInput.textContent.trim();
+        const messageText = getFullMessage(); // 전체 메시지 가져오기
 
         if (messageText !== '') {
             const newMessageDiv = document.createElement('div');
@@ -48,4 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
             chatMessageInput.textContent = '';
         }
     });
+
+    // 전체 메시지를 가져오는 함수
+    function getFullMessage() {
+        // editableText는 사용자가 수정한 부분
+        const editableText = chatMessageInput.textContent.trim();
+        // 기본 문장과 합침
+        return `아 혹시 저번에 너네 집에서 ${editableText} 들었을 때 났던 향 기억나?`;
+    }
 });

@@ -3,6 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatMessageInput = document.querySelector('.input-bar .editable-text'); // 입력창
     const sendButton = document.querySelector('.send-button'); // 전송 버튼
 
+    // 첫 번째 메시지 생성 함수
+    function getFirstMessage() {
+        const editableText = chatMessageInput.textContent.trim(); // 노래 부분
+        return `아 혹시 저번에 너네 집에서 ${editableText} 들었을 때 났던 향 기억나?`;
+    }
+
+    // 두 번째 메시지 생성 함수 (가수 부분 수정 후)
+    function getSecondMessage() {
+        const gasuText = chatMessageInput.textContent.trim(); // 가수 부분
+        return `아 혹시 저번에 너네 집에서 ${gasuText} 부른 거였는데...`;
+    }
+
     // 엔터 키를 눌렀을 때 첫 번째 메시지 추가
     chatMessageInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -34,12 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
             makeGasuEditable(); // "가수" 부분을 수정 가능하게 만들기
         }
     });
-
-    // 첫 번째 메시지 생성 함수
-    function getFirstMessage() {
-        const editableText = chatMessageInput.textContent.trim(); // 노래 부분
-        return `아 혹시 저번에 너네 집에서 ${editableText} 들었을 때 났던 향 기억나?`;
-    }
 
     // 메시지 추가 함수 (보낸 메시지로 추가)
     function addMessage(messageText) {
@@ -78,17 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // 엔터 키를 누르면 전체 문장 출력
         editableGasu.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                const finalMessage = getFinalMessage(editableGasu.textContent); // 수정된 "가수" 부분을 포함한 메시지
+                const finalMessage = getSecondMessage(); // 수정된 "가수" 부분을 포함한 메시지
                 addMessage(finalMessage); // 최종 메시지 출력
 
                 // 입력창 초기화
                 chatMessageInput.textContent = ''; 
             }
         });
-    }
-
-    // 수정된 "가수" 부분을 포함하여 최종 문장 가져오기
-    function getFinalMessage(gasuText) {
-        return `아 혹시 저번에 너네 집에서 ${gasuText} 들었을 때 났던 향 기억나?`;
     }
 });

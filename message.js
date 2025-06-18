@@ -3,17 +3,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatMessageInput = document.querySelector('.input-bar .editable-text'); // 입력창
     const sendButton = document.querySelector('.send-button'); // 전송 버튼
 
-    // 엔터 키를 눌렀을 때 메시지 추가
+    // 엔터 키를 눌렀을 때 첫 번째 메시지 추가
     chatMessageInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             let messageText = getFirstMessage(); // 첫 번째 메시지 가져오기
 
             if (messageText !== '') {
-                // 메시지 추가
+                // 첫 번째 메시지 추가
                 addMessage(messageText);
 
                 // 입력창을 두 번째 텍스트로 변경
                 chatMessageInput.textContent = ' <가수>?이 부른 거였는데...'; // 입력창 텍스트 변경
+                makeGasuEditable(); // "가수" 부분을 수정 가능하게 만들기
             }
         }
     });
@@ -28,8 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
             messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
             chatMessageInput.textContent = ''; // 입력창 초기화
 
-            // 두 번째 텍스트로 변경
+            // 두 번째 메시지로 <가수>? 부분 추가
             chatMessageInput.textContent = ' <가수>?이 부른 거였는데...'; // 입력창 텍스트 변경
+            makeGasuEditable(); // "가수" 부분을 수정 가능하게 만들기
         }
     });
 
@@ -52,5 +54,25 @@ document.addEventListener('DOMContentLoaded', function() {
         messagesDisplay.appendChild(newMessageDiv);
 
         messagesDisplay.scrollTop = messagesDisplay.scrollHeight; // 스크롤을 맨 아래로
+    }
+
+    // "가수" 부분을 수정 가능하게 만드는 함수
+    function makeGasuEditable() {
+        const editableText = chatMessageInput.textContent;
+
+        // "가수" 부분만 <span contenteditable="true">로 감싸기
+        chatMessageInput.innerHTML = editableText.replace(
+            '<가수>', 
+            '<span contenteditable="true" class="editable-gasu">가수</span>'
+        );
+
+        const editableGasu = document.querySelector('.editable-gasu');
+        editableGasu.addEventListener('input', function() {
+            // 실시간으로 수정된 가수 텍스트를 업데이트
+            chatMessageInput.innerHTML = chatMessageInput.innerHTML.replace(
+                /<span contenteditable="true" class="editable-gasu">.*?<\/span>/,
+                `<span contenteditable="true" class="editable-gasu">${editableGasu.textContent}</span>`
+            );
+        });
     }
 });

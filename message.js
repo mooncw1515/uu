@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     const messagesDisplay = document.querySelector('.chat-area'); // 대화 메시지가 표시될 영역
-    const chatMessageInput = document.querySelector('.input-bar .editable-text'); // 하나의 입력창
+    const chatMessageInput = document.querySelector('.input-bar .editable-text'); // 입력창
     const sendButton = document.querySelector('.send-button'); // 전송 버튼
 
     // 첫 번째 메시지 생성 함수
     function getFirstMessage() {
         const editableText = chatMessageInput.textContent.trim(); // 노래 부분
-        return `아 혹시 저번에 너네 집에서 ${editableText} 들었을 때 났던 향 기억나?`;
+        return editableText.replace("<노래>", "노래").replace("<가수>", "가수");
     }
 
     // 두 번째 메시지 생성 함수 (가수 부분 수정 후)
     function getSecondMessage() {
-        const gasuText = chatMessageInput.textContent.trim(); // 가수 부분
-        return `아 혹시 저번에 너네 집에서 ${gasuText} 부른 거였는데...`;
+        const editableText = chatMessageInput.textContent.trim(); // 가수 부분
+        return editableText.replace("<노래>", "노래").replace("<가수>", "가수");
     }
 
     // 첫 번째 메시지 추가

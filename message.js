@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 입력창 초기화
                 chatMessageInput.textContent = ''; // 입력창 초기화
+
+                // 다음 문장 보여주기 (예: <가수>?이 부른 거였는데...)
+                setTimeout(function() {
+                    showNextInput();
+                }, 1000); // 1초 후에 입력창에 텍스트 추가
             }
         }
     });
@@ -46,6 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
             chatMessageInput.textContent = '';
+
+            // 다음 문장 보여주기 (예: <가수>?이 부른 거였는데...)
+            setTimeout(function() {
+                showNextInput();
+            }, 1000); // 1초 후에 입력창에 텍스트 추가
         }
     });
 
@@ -55,5 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const editableText = chatMessageInput.textContent.trim();
         // 기본 문장과 합침
         return `아 혹시 저번에 너네 집에서 ${editableText} 들었을 때 났던 향 기억나?`;
+    }
+
+    // 다음 문장 입력창에 추가
+    function showNextInput() {
+        const nextInput = ' <가수>?이 부른 거였는데...';
+        chatMessageInput.textContent = nextInput; // 입력창에 다음 텍스트 넣기
     }
 });

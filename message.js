@@ -74,5 +74,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 `<span contenteditable="true" class="editable-gasu">${editableGasu.textContent}</span>`
             );
         });
+
+        // 엔터 키를 누르면 전체 문장 출력
+        editableGasu.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const finalMessage = getFinalMessage(editableGasu.textContent); // 수정된 "가수" 부분을 포함한 메시지
+                addMessage(finalMessage); // 최종 메시지 출력
+
+                // 입력창 초기화
+                chatMessageInput.textContent = ''; 
+            }
+        });
+    }
+
+    // 수정된 "가수" 부분을 포함하여 최종 문장 가져오기
+    function getFinalMessage(gasuText) {
+        return `아 혹시 저번에 너네 집에서 ${gasuText} 들었을 때 났던 향 기억나?`;
     }
 });

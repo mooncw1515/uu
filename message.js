@@ -38,29 +38,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentInputState = 2; // 상태를 일반 입력으로 변경 (더 이상 고정 문구 없음)
 
                 // 자동 메시지 로직 시작 (이전 요청 및 추가된 부분 포함)
-                // 첫 번째 자동 메시지 (내 채팅, 파란 말풍선)
-                setTimeout(() => {
+                setTimeout(() => { // 첫 번째 자동 메시지 시작 (가수 메시지 전송 후 1초)
                     addMessageToChat("그거 무슨 향인지 궁금해서..ㅠ", 'right', 'blue');
-                    // 첫 번째 자동 메시지 출력 후, 다음 메시지 1초 후
-                    setTimeout(() => {
+                    setTimeout(() => { // 2초 (총 2초 후)
                         addMessageToChat("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", 'right', 'blue');
-                        // 두 번째 자동 메시지 출력 후, 다음 메시지 1초 후 (회색 말풍선 시작)
-                        setTimeout(() => {
+                        setTimeout(() => { // 3초 (총 3초 후)
                             addMessageToChat("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", 'left', 'gray');
-                            // 세 번째 자동 메시지 출력 후, 다음 메시지 1초 후
-                            setTimeout(() => {
+                            setTimeout(() => { // 4초 (총 4초 후)
                                 addMessageToChat("아", 'left', 'gray');
-                                // 네 번째 자동 메시지 출력 후, 마지막 회색 메시지 1초 후
-                                setTimeout(() => {
+                                setTimeout(() => { // 5초 (총 5초 후)
                                     addMessageToChat("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", 'left', 'gray');
-                                    // **** 여기에 새로운 자동 메시지 로직 추가 시작 ****
-                                    setTimeout(() => {
+                                    setTimeout(() => { // 6초 (총 6초 후)
                                         addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
-                                        setTimeout(() => {
+                                        setTimeout(() => { // 7초 (총 7초 후)
                                             addMessageToChat("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", 'right', 'blue');
-                                        }, 1000); // ㄱㅅㄱㅅ 출력 후 1초
-                                    }, 1000); // "탑은 [1]고..." 출력 후 1초
-                                    // **** 새로운 자동 메시지 로직 추가 끝 ****
+                                            // **** 여기에 새로운 자동 메시지 로직 추가 시작 ****
+                                            setTimeout(() => { // 8초 (총 8초 후)
+                                                addMessageToChat("어이없는데 웃겨서 말해줄게", 'left', 'gray');
+                                                setTimeout(() => { // 9초 (총 9초 후)
+                                                    addMessageToChat("[1] {}%, [2] {}%, [3] {}%", 'left', 'gray');
+                                                }, 1000); 
+                                            }, 1000); 
+                                            // **** 새로운 자동 메시지 로직 추가 끝 ****
+                                        }, 1000); 
+                                    }, 1000); 
                                 }, 1000); 
                             }, 1000); 
                         }, 1000); 

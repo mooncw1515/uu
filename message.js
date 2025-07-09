@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentInputState = 0; // 0: 첫 번째 문장 ('노래'), 1: 두 번째 문장 ('가수'), 2: 일반 입력
 
     const defaultInputMessage = "메시지를 입력하세요..."; // 기본 입력창 문구 정의
-    const messageDelay = 1500; // 1.5초
+    const messageInterval = 1500; // 모든 자동 메시지 사이의 간격 (1.5초)
+    const transitionDelayAfterLastMessage = 7000; // 마지막 자동 메시지 후 화면 전환까지의 시간 (7초)
 
     // 메시지를 채팅창에 추가하는 헬퍼 함수
     function addMessageToChat(text, type = 'right', bubbleColor = 'blue') {
@@ -22,82 +23,37 @@ document.addEventListener('DOMContentLoaded', function() {
         messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
     }
 
-    // 자동 메시지 시퀀스를 처리하는 함수
-    function startAutoMessageSequence() {
-        let delay = messageDelay; // 첫 메시지는 1.5초 후
+    // 모든 자동 메시지 시퀀스를 처리하고 마지막에 화면을 전환하는 함수
+    function startFullAutoSequence() {
+        // 자동 메시지 리스트와 각 메시지의 타입/색상
+        const autoMessages = [
+            { text: "그거 무슨 향인지 궁금해서..ㅠ", type: 'right', color: 'blue' },
+            { text: "참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", type: 'right', color: 'blue' },
+            { text: "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", type: 'left', color: 'gray' },
+            { text: "아", type: 'left', color: 'gray' },
+            { text: "탑은 [1]고, 미들은 [2]고, 베이스는 [3]", type: 'left', color: 'gray' },
+            { text: "ㄱㅅㄱㅅ", type: 'right', color: 'blue' },
+            { text: "어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", type: 'right', color: 'blue' },
+            { text: "어이없는데 웃겨서 말해줄게", type: 'left', color: 'gray' },
+            { text: "[1] {}%, [2] {}%, [3] {}%", type: 'left', color: 'gray' },
+            { text: "ㄱㅅㄱㅅ", type: 'right', color: 'blue' },
+            { text: "야 너 진짜 이게 목적이네..", type: 'left', color: 'gray' }
+        ];
 
-        // 1. "그거 무슨 향인지 궁금해서..ㅠ" (파란색)
+        // 각 메시지를 순차적으로 출력
+        autoMessages.forEach((msg, index) => {
+            setTimeout(() => {
+                addMessageToChat(msg.text, msg.type, msg.color);
+            }, (index + 1) * messageInterval); // 첫 메시지는 1.5초, 두 번째는 3초 등
+        });
+
+        // 마지막 자동 메시지가 출력된 총 시간
+        const totalAutoMessagesDuration = autoMessages.length * messageInterval;
+
+        // 모든 자동 메시지가 끝난 후 7초 뒤에 화면 전환
         setTimeout(() => {
-            addMessageToChat("그거 무슨 향인지 궁금해서..ㅠ", 'right', 'blue');
-        }, delay);
-
-        // 2. "참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라" (파란색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", 'right', 'blue');
-        }, delay);
-
-        // 3. "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" (회색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", 'left', 'gray');
-        }, delay);
-
-        // 4. "아" (회색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("아", 'left', 'gray');
-        }, delay);
-
-        // 5. "탑은 [1]고, 미들은 [2]고, 베이스는 [3]" (회색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", 'left', 'gray');
-        }, delay);
-
-        // 6. "ㄱㅅㄱㅅ" (파란색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
-        }, delay);
-
-        // 7. "어이없겠지만 혹시 향료 비율도 알려줄 수 있어?" (파란색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", 'right', 'blue');
-        }, delay);
-
-        // 8. "어이없는데 웃겨서 말해줄게" (회색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("어이없는데 웃겨서 말해줄게", 'left', 'gray');
-        }, delay);
-
-        // 9. "[1] {}%, [2] {}%, [3] {}%" (회색)
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("[1] {}%, [2] {}%, [3] {}%", 'left', 'gray');
-        }, delay);
-
-        // 10. "ㄱㅅㄱㅅ" (파란색) - 최종 추가 요청
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
-        }, delay);
-
-        // 11. "야 너 진짜 이게 목적이네.." (회색) - 최종 추가 요청
-        delay += messageDelay;
-        setTimeout(() => {
-            addMessageToChat("야 너 진짜 이게 목적이네..", 'left', 'gray');
-        }, delay);
-
-        // 화면 전환: 모든 자동 메시지가 끝난 후 7초 뒤
-        const totalAutoMessageDuration = delay; // 마지막 메시지까지의 총 시간
-        const transitionDelay = totalAutoMessageDuration + (7000 - messageDelay); // 마지막 메시지 출력 기준 7초
-
-        setTimeout(() => {
-            window.location.href = 'loading.html';
-        }, transitionDelay);
+            window.location.href = 'loading.html'; // loading.html로 이동
+        }, totalAutoMessagesDuration + transitionDelayAfterLastMessage);
     }
 
     // 메시지를 추가하고 입력창을 업데이트하는 함수
@@ -109,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return; 
         }
 
-        if (messageText !== '') {
+        if (messageText !== '') { // 메시지가 비어있지 않다면
             addMessageToChat(messageText, 'right', 'blue');
 
             if (currentInputState === 0) {
@@ -118,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (currentInputState === 1) {
                 inputBar.innerHTML = `<span contenteditable="true" class="editable-text">${defaultInputMessage}</span>`;
                 currentInputState = 2;
-                startAutoMessageSequence(); // 자동 메시지 시퀀스 시작 함수 호출
+                startFullAutoSequence(); // 모든 자동 메시지 및 화면 전환 시퀀스 시작
             } else {
                 inputBar.innerHTML = `<span contenteditable="true" class="editable-text">${defaultInputMessage}</span>`;
             }

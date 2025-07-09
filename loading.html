@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* 화면 전체 높이 */
+            background-color: #FFFFFF; /* 흰색 바탕 */
+            font-family: 'Nanum Gothic', sans-serif; /* 폰트 적용 */
+            overflow: hidden; /* 스크롤바 제거 */
+        }
+
+        .loading-container {
+            width: 80%; /* 노트북 화면 4등분 중 가로로 띄운 위에서 2번째 조각처럼 보이게 (조정 가능) */
+            max-width: 600px; /* 너무 커지지 않도록 최대 너비 설정 */
+            position: relative; /* 자식 요소 위치 지정을 위해 */
+            top: -12.5vh; /* 화면 높이의 1/4 (25vh) 위에 위치시키기 위해 (정확히 2번째 조각 중앙쯤) */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #E0E0E0; /* 회색 바의 배경 */
+            height: 150px; /* 회색 바의 높이 (대략 4등분 중 2번째 조각에서 적당한 높이) */
+            padding: 20px 0; /* 내부 여백 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        }
+
+        .loading-text-wrapper {
+            flex: 2; /* 회색 바를 3등분 했을 때 위 2조각 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .loading-text {
+            font-size: 3em; /* 글자 크기 조정 */
+            color: #000000; /* 검은색 */
+            letter-spacing: 0.1em; /* 가로로 늘인 느낌 */
+            font-weight: 700; /* 굵게 */
+        }
+
+        .progress-bar-wrapper {
+            flex: 1; /* 회색 바를 3등분 했을 때 밑 1조각 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding-bottom: 15px; /* 아래쪽 여백 */
+        }
+
+        .progress-bar-background {
+            width: 80%; /* 양 끝에서 조금 띄어져 있게 */
+            height: 5px; /* 정말 얇게 */
+            background-color: #B0B0B0; /* 조금 진한 회색 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            overflow: hidden; /* 파란색 선이 바깥으로 나가지 않게 */
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%; /* 초기 너비 0% */
+            background-color: #007bff; /* 파란색 선 */
+            transition: width 7s linear; /* 7초 동안 선형적으로 차오르게 */
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loading-text-wrapper">
+            <span class="loading-text">LOADING....</span>
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar-background">
+                <div class="progress-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressBarFill = document.getElementById('progressBarFill');
+            // DOM이 로드된 후 바로 파란색 바가 차오르기 시작
+            progressBarFill.style.width = '100%'; 
+        });
+    </script>
+</body>
+</html>

@@ -1,7 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const messagesDisplay = document.querySelector('.chat-area'); // 대화 메시지가 표시될 영역
-    const inputBar = document.querySelector('.input-bar'); // 전체 입력바 div
+    const messagesDisplay = document.querySelector('.chat-area');
+    const inputBar = document.querySelector('.input-bar');
     let currentInputState = 0; // 0: 첫 번째 문장 ('노래'), 1: 두 번째 문장 ('가수'), 2: 일반 입력
+
+    const defaultInputMessage = "메시지를 입력하세요..."; // 기본 입력창 문구 정의
+    const messageDelay = 1500; // 1.5초
 
     // 메시지를 채팅창에 추가하는 헬퍼 함수
     function addMessageToChat(text, type = 'right', bubbleColor = 'blue') {
@@ -19,71 +22,107 @@ document.addEventListener('DOMContentLoaded', function() {
         messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
     }
 
+    // 자동 메시지 시퀀스를 처리하는 함수
+    function startAutoMessageSequence() {
+        let delay = messageDelay; // 첫 메시지는 1.5초 후
+
+        // 1. "그거 무슨 향인지 궁금해서..ㅠ" (파란색)
+        setTimeout(() => {
+            addMessageToChat("그거 무슨 향인지 궁금해서..ㅠ", 'right', 'blue');
+        }, delay);
+
+        // 2. "참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라" (파란색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", 'right', 'blue');
+        }, delay);
+
+        // 3. "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ" (회색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", 'left', 'gray');
+        }, delay);
+
+        // 4. "아" (회색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("아", 'left', 'gray');
+        }, delay);
+
+        // 5. "탑은 [1]고, 미들은 [2]고, 베이스는 [3]" (회색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", 'left', 'gray');
+        }, delay);
+
+        // 6. "ㄱㅅㄱㅅ" (파란색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
+        }, delay);
+
+        // 7. "어이없겠지만 혹시 향료 비율도 알려줄 수 있어?" (파란색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", 'right', 'blue');
+        }, delay);
+
+        // 8. "어이없는데 웃겨서 말해줄게" (회색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("어이없는데 웃겨서 말해줄게", 'left', 'gray');
+        }, delay);
+
+        // 9. "[1] {}%, [2] {}%, [3] {}%" (회색)
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("[1] {}%, [2] {}%, [3] {}%", 'left', 'gray');
+        }, delay);
+
+        // 10. "ㄱㅅㄱㅅ" (파란색) - 최종 추가 요청
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
+        }, delay);
+
+        // 11. "야 너 진짜 이게 목적이네.." (회색) - 최종 추가 요청
+        delay += messageDelay;
+        setTimeout(() => {
+            addMessageToChat("야 너 진짜 이게 목적이네..", 'left', 'gray');
+        }, delay);
+
+        // 화면 전환: 모든 자동 메시지가 끝난 후 7초 뒤
+        const totalAutoMessageDuration = delay; // 마지막 메시지까지의 총 시간
+        const transitionDelay = totalAutoMessageDuration + (7000 - messageDelay); // 마지막 메시지 출력 기준 7초
+
+        setTimeout(() => {
+            window.location.href = 'loading.html';
+        }, transitionDelay);
+    }
+
     // 메시지를 추가하고 입력창을 업데이트하는 함수
     function sendMessage() {
-        const messageText = inputBar.textContent.trim(); // .input-bar 전체의 텍스트를 가져옴
-        const defaultInputMessage = "메시지를 입력하세요..."; // 기본 입력창 문구 정의
+        const messageText = inputBar.textContent.trim();
 
         // 기본 문구를 그대로 전송하는 경우 무시
         if (messageText === defaultInputMessage) {
             return; 
         }
 
-        if (messageText !== '') { // 메시지가 비어있지 않다면 (빈 문자열은 여전히 무시)
-            // 1. 사용자가 입력한 메시지 추가
+        if (messageText !== '') {
             addMessageToChat(messageText, 'right', 'blue');
 
-            // 2. 입력창 내용 변경 및 상태 업데이트
             if (currentInputState === 0) {
-                // 첫 번째 메시지 전송 후, 두 번째 문장으로 변경
                 inputBar.innerHTML = '<span contenteditable="true" class="editable-text">가수</span>?이 부른 거였는데..';
-                currentInputState = 1; // 상태를 두 번째 문장으로 변경
+                currentInputState = 1;
             } else if (currentInputState === 1) {
-                // 두 번째 메시지 전송 후, 일반 입력창으로 변경
-                inputBar.innerHTML = `<span contenteditable="true" class="editable-text">${defaultInputMessage}</span>`; // 기본 문구로 설정
-                currentInputState = 2; // 상태를 일반 입력으로 변경 (더 이상 고정 문구 없음)
-
-                // 자동 메시지 로직 시작 (모든 순차 메시지 포함)
-                setTimeout(() => { // 1.5초 후
-                    addMessageToChat("그거 무슨 향인지 궁금해서..ㅠ", 'right', 'blue');
-                    setTimeout(() => { // 1.5초 후
-                        addMessageToChat("참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", 'right', 'blue');
-                        setTimeout(() => { // 1.5초 후
-                            addMessageToChat("ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", 'left', 'gray');
-                            setTimeout(() => { // 1.5초 후
-                                addMessageToChat("아", 'left', 'gray');
-                                setTimeout(() => { // 1.5초 후
-                                    addMessageToChat("탑은 [1]고, 미들은 [2]고, 베이스는 [3]", 'left', 'gray');
-                                    setTimeout(() => { // 1.5초 후
-                                        addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
-                                        setTimeout(() => { // 1.5초 후
-                                            addMessageToChat("어이없겠지만 혹시 향료 비율도 알려줄 수 있어?", 'right', 'blue');
-                                            setTimeout(() => { // 1.5초 후
-                                                addMessageToChat("어이없는데 웃겨서 말해줄게", 'left', 'gray');
-                                                setTimeout(() => { // 1.5초 후
-                                                    addMessageToChat("[1] {}%, [2] {}%, [3] {}%", 'left', 'gray');
-                                                    setTimeout(() => { // 1.5초 후
-                                                        addMessageToChat("ㄱㅅㄱㅅ", 'right', 'blue');
-                                                        setTimeout(() => { // 1.5초 후
-                                                            addMessageToChat("야 너 진짜 이게 목적이네..", 'left', 'gray');
-                                                        }, 1500); // 최종 메시지
-                                                    }, 1500); 
-                                                }, 1500); 
-                                            }, 1500); 
-                                        }, 1500); 
-                                    }, 1500); 
-                                }, 1500); 
-                            }, 1500); 
-                        }, 1500); 
-                    }, 1500); 
-                }, 1500); 
-
+                inputBar.innerHTML = `<span contenteditable="true" class="editable-text">${defaultInputMessage}</span>`;
+                currentInputState = 2;
+                startAutoMessageSequence(); // 자동 메시지 시퀀스 시작 함수 호출
             } else {
-                // 일반 입력 상태에서는 단순히 입력창을 비웁니다.
                 inputBar.innerHTML = `<span contenteditable="true" class="editable-text">${defaultInputMessage}</span>`;
             }
             
-            // 3. 새로 생성된 editable-text 요소에 포커스 및 커서 이동
             const newEditableText = inputBar.querySelector('.editable-text');
             if (newEditableText) {
                 newEditableText.focus();

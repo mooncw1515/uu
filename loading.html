@@ -1,129 +1,97 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
+    <title>Loading</title>
     <style>
+        /* 이미지와 유사한 디지털/모노스페이스 폰트 사용 시도 */
+        /* 시스템에 설치된 폰트 중 이미지와 가장 유사한 폰트를 선택합니다. */
+        /* 만약 특정 폰트(예: "Digital-7", "Segment14")를 사용하려면 해당 폰트 파일을 웹에 포함해야 합니다. */
+        /* 여기서는 시스템 기본 폰트 중 디지털 느낌이 나는 것을 우선합니다. */
         body {
             margin: 0;
             display: flex;
+            flex-direction: column; /* 텍스트와 바를 세로로 정렬 */
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* 화면 전체 높이 */
-            background-color: #FFFFFF; /* 흰색 바탕 */
-            font-family: 'Open Sans', sans-serif; /* 얇고 미니멀한 폰트 */
-            overflow: hidden; /* 스크롤바 제거 */
+            min-height: 100vh;
+            background-color: white; /* 흰색 배경 */
+            /* 이미지와 가장 유사한 디지털 느낌의 모노스페이스 폰트 시도 */
+            /* 시스템에 없을 경우를 대비하여 fallback 폰트 추가 */
+            font-family: 'Courier New', 'Lucida Console', 'Monaco', monospace;
+            overflow: hidden; /* 스크롤바 방지 */
         }
 
         .loading-container {
-            width: 80%;
-            max-width: 600px;
-            /* 이미지와 유사한 중앙 배치 (상단에 쏠리지 않도록) */
-            position: relative; /* 자식 요소 위치 지정을 위해 */
-            top: 0; /* 기존 -12.5vh 제거, 중앙 정렬 유지 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* 세로 중앙 정렬 */
-            
-            /* 이미지 디자인에 맞춰 배경색 제거 및 테두리만 */
-            background-color: transparent; /* 배경색 투명 */
-            border: none; /* 컨테이너 자체 테두리 제거 */
-            height: auto; /* 내용에 맞춰 높이 자동 조절 */
-            padding: 0; /* 패딩 제거 */
-            box-sizing: border-box; 
-        }
-
-        .loading-text-wrapper {
-            width: 100%;
-            text-align: center; /* 텍스트 중앙 정렬 */
-            margin-bottom: 20px; /* 바와 텍스트 간격 */
+            text-align: center;
+            /* 화면 너비의 거의 꽉 채우도록 설정 (여백 고려) */
+            width: 90vw; /* viewport width의 90% */
+            max-width: 1000px; /* 너무 커지지 않도록 최대 너비 설정 */
+            padding: 20px; /* 컨테이너 자체에 약간의 패딩 */
+            box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
         }
 
         .loading-text {
-            font-size: 2.5em; /* 글자 크기 조정, 이미지에 맞춰 */
-            color: #000000; /* 검정색 */
-            letter-spacing: 0.2em; /* 이미지처럼 넓은 자간 */
-            font-weight: 300; /* 매우 얇게 (Light) */
-            text-shadow: none; /* 그림자 제거 */
-            text-transform: uppercase; /* 대문자로 강제 변환 */
-            
-            /* 페이드 인/아웃 애니메이션은 이미지에 없으므로 일단 주석 처리. 필요하면 다시 활성화 */
-            /* animation: fadeAnimation 3s infinite alternate; */ 
+            color: black; /* 검은색 글씨 */
+            font-size: clamp(2em, 5vw, 4em); /* 화면 크기에 따라 글씨 크기 조절 (반응형) */
+            margin-bottom: 5vh; /* 텍스트와 로딩 바 사이의 간격 (화면 높이의 5%) */
+            letter-spacing: 0.2em; /* 글자 간격 조정 */
+            text-transform: uppercase;
+            font-weight: bold; /* 이미지의 글씨가 더 굵어 보입니다. */
         }
 
-        /* 페이드 인/아웃 키프레임 정의 (주석 처리됨) */
-        /* @keyframes fadeAnimation {
-            0% { opacity: 0.3; }
-            100% { opacity: 1; }
-        } */
-
-        .progress-bar-wrapper {
-            width: 100%; /* 이미지처럼 컨테이너 너비와 동일하게 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .progress-bar-outline { /* 바의 테두리 부분 */
-            width: 90%; /* 실제 바 너비 */
-            height: 20px; /* 바 두께, 이미지에 맞춰 더 두껍게 */
-            border: 1px solid #000000; /* 검정색 테두리 */
-            box-sizing: border-box; /* 패딩 포함 크기 계산 */
+        .loading-bar-outer {
+            width: 100%; /* 컨테이너 너비에 꽉 채움 */
+            height: 50px; /* 로딩 바의 전체 높이, 이미지와 유사하게 키움 */
+            border: 4px solid black; /* 이미지의 선 굵기에 맞춤, 색상 반전 */
             position: relative;
-            overflow: hidden;
-            border-radius: 0; /* 둥근 테두리 제거, 각지게 */
+            display: flex;
+            align-items: center;
+            box-sizing: border-box; /* 패딩/보더가 너비에 포함되도록 */
+            padding: 0 20px; /* 내부 로딩 바와 테두리 사이 여백 */
         }
 
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background-color: #87CEEB; /* 하늘색 */
-            transition: width 60s linear; /* 60초(1분) 동안 선형적으로 차오르게 */
+        /* 로딩 바 양쪽 끝의 깔끔한 한 줄 선 */
+        .loading-bar-outer::before,
+        .loading-bar-outer::after {
+            content: '';
             position: absolute;
-            left: 0;
+            width: 5px; /* 선의 굵기 */
+            height: 100%; /* 바의 높이와 동일 */
+            background-color: black; /* 선의 색상 */
             top: 0;
-            border-radius: 0; /* 둥근 테두리 제거, 각지게 */
+            box-sizing: border-box;
+        }
+
+        .loading-bar-outer::before {
+            left: -15px; /* 바깥 테두리에서 약간 떨어져 위치 */
+        }
+
+        .loading-bar-outer::after {
+            right: -15px; /* 바깥 테두리에서 약간 떨어져 위치 */
+        }
+
+        .loading-bar-inner {
+            width: 0%; /* 애니메이션으로 채워질 부분 */
+            height: 20px; /* 내부 로딩 바의 높이, 이미지와 유사하게 키움 */
+            background-color: black; /* 내부 바 색상, 색상 반전 */
+            animation: fillBar 60s linear infinite; /* 매우 천천히 (60초) */
+            box-sizing: border-box;
+        }
+
+        @keyframes fillBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="loading-container">
-        <div class="loading-text-wrapper">
-            <span class="loading-text">LOADING</span> </div>
-        <div class="progress-bar-wrapper">
-            <div class="progress-bar-outline" id="progressBarOutline">
-                <div class="progress-fill" id="progressBarFill"></div>
-            </div>
+        <div class="loading-text">LOADING...</div>
+        <div class="loading-bar-outer">
+            <div class="loading-bar-inner"></div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const progressBarFill = document.getElementById('progressBarFill');
-            const transitionDuration = 60000; // 60초 = 60000ms
-
-            function startProgressBarAnimation() {
-                // 너비를 0으로 설정하여 초기화 (애니메이션이 시작되지 않은 상태)
-                progressBarFill.style.transition = 'none'; 
-                progressBarFill.style.width = '0%'; 
-
-                // 짧은 딜레이 후 transition을 다시 활성화하고 애니메이션 시작
-                setTimeout(() => {
-                    progressBarFill.style.transition = `width ${transitionDuration / 1000}s linear`;
-                    progressBarFill.style.width = '100%'; 
-                }, 50);
-
-                // 애니메이션이 끝난 후 반복
-                setTimeout(() => {
-                    startProgressBarAnimation();
-                }, transitionDuration);
-            }
-
-            startProgressBarAnimation();
-        });
-    </script>
 </body>
 </html>

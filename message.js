@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 모든 자동 메시지 시퀀스를 처리하고 마지막에 화면을 전환하는 함수
     function startFullAutoSequence() {
-        // 자동 메시지 리스트와 각 메시지의 타입/색상
         const autoMessages = [
             { text: "그거 무슨 향인지 궁금해서..ㅠ", type: 'right', color: 'blue' },
             { text: "참고로 이걸 구실로 어떻게 다시 해보자는 거 아니니까 진짜 향만 알려주라", type: 'right', color: 'blue' },
@@ -40,20 +39,20 @@ document.addEventListener('DOMContentLoaded', function() {
             { text: "야 너 진짜 이게 목적이네..", type: 'left', color: 'gray' }
         ];
 
-        // 각 메시지를 순차적으로 출력
+        let currentDelay = 0; // 현재까지의 누적 지연 시간
+
         autoMessages.forEach((msg, index) => {
+            currentDelay += messageInterval; // 각 메시지마다 1.5초 추가
             setTimeout(() => {
                 addMessageToChat(msg.text, msg.type, msg.color);
-            }, (index + 1) * messageInterval); // 첫 메시지는 1.5초, 두 번째는 3초 등
+            }, currentDelay);
         });
 
-        // 마지막 자동 메시지가 출력된 총 시간
-        const totalAutoMessagesDuration = autoMessages.length * messageInterval;
-
-        // 모든 자동 메시지가 끝난 후 7초 뒤에 화면 전환
+        // 마지막 메시지가 출력될 예상 시간 (currentDelay에 마지막 메시지 시간까지 모두 더해짐)
+        // 이 시간으로부터 7초 후에 화면 전환
         setTimeout(() => {
             window.location.href = 'loading.html'; // loading.html로 이동
-        }, totalAutoMessagesDuration + transitionDelayAfterLastMessage);
+        }, currentDelay + transitionDelayAfterLastMessage);
     }
 
     // 메시지를 추가하고 입력창을 업데이트하는 함수

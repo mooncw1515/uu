@@ -42,7 +42,14 @@
             font-size: 3em; /* 글자 크기 조정 */
             color: #000000; /* 검은색 */
             letter-spacing: 0.1em; /* 가로로 늘인 느낌 */
-            font-weight: 700; /* 굵게 */
+            font-weight: 900; /* 더 굵게 */
+            /* 사진과 유사한 획 두꺼움 및 입체감 표현 */
+            text-shadow: 
+                -1px -1px 0 #000,  
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000,
+                2px 2px 0 rgba(0,0,0,0.2); /* 약간의 그림자 추가 */
         }
 
         .progress-bar-wrapper {
@@ -67,14 +74,15 @@
             height: 100%;
             width: 0%; /* 초기 너비 0% */
             background-color: #007bff; /* 파란색 선 */
+            /* 여기서 transition 속성으로 채워지는 애니메이션을 제어합니다. */
             transition: width 7s linear; /* 7초 동안 선형적으로 차오르게 */
             position: absolute;
             left: 0;
             top: 0;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800;900&display=swap" rel="stylesheet"> 
+    </head>
 <body>
     <div class="loading-container">
         <div class="loading-text-wrapper">
@@ -90,8 +98,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const progressBarFill = document.getElementById('progressBarFill');
-            // DOM이 로드된 후 바로 파란색 바가 차오르기 시작
-            progressBarFill.style.width = '100%'; 
+            // DOM이 로드된 후 아주 짧은 지연시간(여기서는 100ms)을 두어 
+            // 초기 width: 0%가 적용될 시간을 주고 그 후 애니메이션 시작
+            setTimeout(() => {
+                progressBarFill.style.width = '100%'; 
+            }, 100); 
         });
     </script>
 </body>

@@ -12,65 +12,68 @@
             align-items: center;
             min-height: 100vh; /* 화면 전체 높이 */
             background-color: #FFFFFF; /* 흰색 바탕 */
-            font-family: 'Poppins', sans-serif; /* Poppins 폰트 적용 */
+            font-family: 'Open Sans', sans-serif; /* 얇고 미니멀한 폰트 */
             overflow: hidden; /* 스크롤바 제거 */
         }
 
         .loading-container {
-            width: 80%; /* 노트북 화면 4등분 중 가로로 띄운 위에서 2번째 조각처럼 보이게 (조정 가능) */
-            max-width: 600px; /* 너무 커지지 않도록 최대 너비 설정 */
+            width: 80%;
+            max-width: 600px;
+            /* 이미지와 유사한 중앙 배치 (상단에 쏠리지 않도록) */
             position: relative; /* 자식 요소 위치 지정을 위해 */
-            top: -12.5vh; /* 화면 높이의 1/4 (25vh) 위에 위치시키기 위해 (정확히 2번째 조각 중앙쯤) */
+            top: 0; /* 기존 -12.5vh 제거, 중앙 정렬 유지 */
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #F0F0F0; /* 연한 회색 */
-            height: 150px; /* 회색 바의 높이 */
-            padding: 20px 0; /* 내부 여백 */
-            box-sizing: border-box; /* 패딩 포함 크기 계산 */
-            border-radius: 15px; /* 컨테이너 테두리 둥글게 */
+            justify-content: center; /* 세로 중앙 정렬 */
+            
+            /* 이미지 디자인에 맞춰 배경색 제거 및 테두리만 */
+            background-color: transparent; /* 배경색 투명 */
+            border: none; /* 컨테이너 자체 테두리 제거 */
+            height: auto; /* 내용에 맞춰 높이 자동 조절 */
+            padding: 0; /* 패딩 제거 */
+            box-sizing: border-box; 
         }
 
         .loading-text-wrapper {
-            flex: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             width: 100%;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            margin-bottom: 20px; /* 바와 텍스트 간격 */
         }
 
         .loading-text {
-            font-size: 3em; /* 글자 크기 조정 */
-            color: #000000; /* 검은색 */
-            letter-spacing: 0.1em; /* 가로로 늘인 느낌 */
-            font-weight: 400; /* 700에서 400으로 줄여서 훨씬 얇게 */
-            /* 텍스트 섀도우를 제거하거나 아주 미미하게 조정하여 얇은 느낌 강조 */
+            font-size: 2.5em; /* 글자 크기 조정, 이미지에 맞춰 */
+            color: #000000; /* 검정색 */
+            letter-spacing: 0.2em; /* 이미지처럼 넓은 자간 */
+            font-weight: 300; /* 매우 얇게 (Light) */
             text-shadow: none; /* 그림자 제거 */
-            /* animation: fadeAnimation 3s infinite alternate; */ /* 기존 페이드 애니메이션 유지 */
+            text-transform: uppercase; /* 대문자로 강제 변환 */
+            
+            /* 페이드 인/아웃 애니메이션은 이미지에 없으므로 일단 주석 처리. 필요하면 다시 활성화 */
+            /* animation: fadeAnimation 3s infinite alternate; */ 
         }
 
-        /* 페이드 인/아웃 키프레임 정의 */
-        @keyframes fadeAnimation {
-            0% { opacity: 0.3; } /* 옅은 상태 */
-            100% { opacity: 1; } /* 짙은 상태 */
-        }
+        /* 페이드 인/아웃 키프레임 정의 (주석 처리됨) */
+        /* @keyframes fadeAnimation {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        } */
 
         .progress-bar-wrapper {
-            flex: 1;
+            width: 100%; /* 이미지처럼 컨테이너 너비와 동일하게 */
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
-            padding-bottom: 15px;
         }
 
-        .progress-bar-background {
-            width: 80%;
-            height: 10px; /* 바 두께 */
-            background-color: #B0B0B0; /* 조금 진한 회색 */
-            border-radius: 10px; /* 바 전체 창 테두리 둥글게 */
-            overflow: hidden;
+        .progress-bar-outline { /* 바의 테두리 부분 */
+            width: 90%; /* 실제 바 너비 */
+            height: 20px; /* 바 두께, 이미지에 맞춰 더 두껍게 */
+            border: 1px solid #000000; /* 검정색 테두리 */
+            box-sizing: border-box; /* 패딩 포함 크기 계산 */
             position: relative;
+            overflow: hidden;
+            border-radius: 0; /* 둥근 테두리 제거, 각지게 */
         }
 
         .progress-fill {
@@ -81,18 +84,17 @@
             position: absolute;
             left: 0;
             top: 0;
-            border-radius: 10px; /* 바 부분 테두리 둥글게 */
+            border-radius: 0; /* 둥근 테두리 제거, 각지게 */
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="loading-container">
         <div class="loading-text-wrapper">
-            <span class="loading-text">LOADING....</span>
-        </div>
+            <span class="loading-text">LOADING</span> </div>
         <div class="progress-bar-wrapper">
-            <div class="progress-bar-background">
+            <div class="progress-bar-outline" id="progressBarOutline">
                 <div class="progress-fill" id="progressBarFill"></div>
             </div>
         </div>
@@ -105,22 +107,21 @@
 
             function startProgressBarAnimation() {
                 // 너비를 0으로 설정하여 초기화 (애니메이션이 시작되지 않은 상태)
-                progressBarFill.style.transition = 'none'; // 일시적으로 transition 제거
+                progressBarFill.style.transition = 'none'; 
                 progressBarFill.style.width = '0%'; 
 
                 // 짧은 딜레이 후 transition을 다시 활성화하고 애니메이션 시작
                 setTimeout(() => {
-                    progressBarFill.style.transition = `width ${transitionDuration / 1000}s linear`; // 60s linear
+                    progressBarFill.style.transition = `width ${transitionDuration / 1000}s linear`;
                     progressBarFill.style.width = '100%'; 
-                }, 50); // 아주 짧은 지연 (예: 50ms)
+                }, 50);
 
                 // 애니메이션이 끝난 후 반복
                 setTimeout(() => {
-                    startProgressBarAnimation(); // 함수를 다시 호출하여 반복
-                }, transitionDuration); // 60초 후에 다시 시작
+                    startProgressBarAnimation();
+                }, transitionDuration);
             }
 
-            // 페이지 로드 시 애니메이션 시작
             startProgressBarAnimation();
         });
     </script>
